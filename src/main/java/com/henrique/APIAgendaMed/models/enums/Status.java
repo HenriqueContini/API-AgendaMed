@@ -1,4 +1,4 @@
-package com.henrique.APIAgendaMed.models;
+package com.henrique.APIAgendaMed.models.enums;
 
 public enum Status {
     BOOKED(1),

@@ -1,5 +1,7 @@
 package com.henrique.APIAgendaMed.models;
 
+import com.henrique.APIAgendaMed.models.enums.Status;
+
 import java.util.Date;
 
 public class Appointment {
