@@ -18,8 +18,8 @@ public class SpecializationService {
         List<Specialization> list = repository.findAll();
         List<SpecializationDTO> listDTO = new ArrayList<>();
 
-        for (Specialization d: list) {
-            listDTO.add(new SpecializationDTO(d.getId(), d.getName()));
+        for (Specialization s: list) {
+            listDTO.add(new SpecializationDTO(s.getId(), s.getName()));
         }
 
         return listDTO;
