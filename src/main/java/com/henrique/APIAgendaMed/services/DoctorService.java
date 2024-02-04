@@ -3,6 +3,7 @@ package com.henrique.APIAgendaMed.services;
 import com.henrique.APIAgendaMed.dto.DoctorDTO;
 import com.henrique.APIAgendaMed.exceptions.NotFoundException;
 import com.henrique.APIAgendaMed.models.Doctor;
+import com.henrique.APIAgendaMed.models.Specialization;
 import com.henrique.APIAgendaMed.repositories.DoctorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,5 +31,16 @@ public class DoctorService {
     public DoctorDTO findById(Long id) {
         Doctor doctor = repository.findById(id).orElseThrow(() -> new NotFoundException("Doctor not found"));
         return new DoctorDTO(doctor.getId(), doctor.getName(), doctor.getSpecialization(), doctor.getStartTime(), doctor.getFinishTime());
+    }
+
+    public List<DoctorDTO> findBySpecialization(String specialization) {
+        List<Doctor> list = repository.findBySpecializationNameContaining(specialization);
+        List<DoctorDTO> listDTO = new ArrayList<>();
+
+        for (Doctor d: list) {
+            listDTO.add(new DoctorDTO(d.getId(), d.getName(), d.getSpecialization(), d.getStartTime(), d.getFinishTime()));
+        }
+
+        return listDTO;
     }
 }
