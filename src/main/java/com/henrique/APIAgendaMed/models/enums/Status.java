@@ -2,8 +2,8 @@ package com.henrique.APIAgendaMed.models.enums;
 
 public enum Status {
     BOOKED(1),
-    CANCELLED(2),
-    COMPLETED(3);
+    COMPLETED(2),
+    CANCELLED(3);
 
     private final int code;
 

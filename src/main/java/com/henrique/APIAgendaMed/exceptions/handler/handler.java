@@ -1,5 +1,6 @@
 package com.henrique.APIAgendaMed.exceptions.handler;
 
+import com.henrique.APIAgendaMed.exceptions.DateException;
 import com.henrique.APIAgendaMed.exceptions.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,12 @@ public class handler extends ResponseEntityExceptionHandler {
     public final ResponseEntity<ExceptionResponse> NotFoundException(Exception e, WebRequest request) {
         ExceptionResponse response = new ExceptionResponse(new Date(), e.getMessage(), this.getPath(request));
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
+    @ExceptionHandler(DateException.class)
+    public final ResponseEntity<ExceptionResponse> DateException(Exception e, WebRequest request) {
+        ExceptionResponse response = new ExceptionResponse(new Date(), e.getMessage(), this.getPath(request));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
     private String getPath(WebRequest request) {

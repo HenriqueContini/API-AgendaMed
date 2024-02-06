@@ -1,5 +1,6 @@
 package com.henrique.APIAgendaMed.models;
 
+import com.henrique.APIAgendaMed.dto.UserDTO;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -25,6 +26,12 @@ public class User {
         this.id = id;
         this.name = name;
         this.createdAt = createdAt;
+    }
+
+    public User (UserDTO dto) {
+        id = dto.id();
+        name = dto.name();
+        createdAt = dto.createdAt();
     }
 
     public Long getId() {

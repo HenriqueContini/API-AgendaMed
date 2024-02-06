@@ -1,7 +1,9 @@
 package com.henrique.APIAgendaMed.models;
 
+import com.henrique.APIAgendaMed.dto.DoctorDTO;
 import jakarta.persistence.*;
 
+import javax.print.Doc;
 import java.time.LocalTime;
 import java.util.Objects;
 
@@ -30,6 +32,14 @@ public class Doctor {
         this.specialization = specialization;
         this.startTime = startTime;
         this.finishTime = finishTime;
+    }
+
+    public Doctor(DoctorDTO dto) {
+        id = dto.id();
+        name = dto.name();
+        specialization = dto.specialization();
+        startTime = dto.startTime();
+        finishTime = dto.finishTime();
     }
 
     public Long getId() {
