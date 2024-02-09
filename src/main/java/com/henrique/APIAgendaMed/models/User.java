@@ -1,44 +1,34 @@
 package com.henrique.APIAgendaMed.models;
 
-import com.henrique.APIAgendaMed.dto.UserDTO;
-import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
-@Entity
-@Table(name = "users")
+@Document(collection = "user")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
     private String name;
-
-    @CreationTimestamp
-    @Column(name = "created_at")
-    private Date createdAt;
+    @CreatedDate
+    private LocalDateTime createdAt;
 
     public User() {
     }
 
-    public User(Long id, String name, Date createdAt) {
+    public User(String id, String name, LocalDateTime createdAt) {
         this.id = id;
         this.name = name;
         this.createdAt = createdAt;
     }
 
-    public User (UserDTO dto) {
-        id = dto.id();
-        name = dto.name();
-        createdAt = dto.createdAt();
-    }
-
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -50,11 +40,11 @@ public class User {
         this.name = name;
     }
 
-    public Date getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 

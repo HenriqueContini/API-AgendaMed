@@ -24,7 +24,7 @@ public class AppointmentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AppointmentDTO> findById(@PathVariable Long id) {
+    public ResponseEntity<AppointmentDTO> findById(@PathVariable String id) {
         return ResponseEntity.ok(service.findById(id));
     }
 
@@ -36,7 +36,7 @@ public class AppointmentController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<AppointmentDTO> delete(@PathVariable Long id) {
+    public ResponseEntity<AppointmentDTO> delete(@PathVariable String id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }

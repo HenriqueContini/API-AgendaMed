@@ -1,7 +1,10 @@
 package com.henrique.APIAgendaMed.repositories;
 
 import com.henrique.APIAgendaMed.models.Specialization;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
-public interface SpecializationRepository extends JpaRepository<Specialization, Long> {
+import java.util.List;
+
+public interface SpecializationRepository extends MongoRepository<Specialization, String> {
+    List<Specialization> findByNameIgnoreCaseContaining(String name);
 }

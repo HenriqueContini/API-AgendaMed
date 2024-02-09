@@ -1,32 +1,28 @@
 package com.henrique.APIAgendaMed.models;
 
 import com.henrique.APIAgendaMed.models.enums.Status;
-import jakarta.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
-@Entity
+@Document(collection = "appointment")
 public class Appointment {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private Date date;
-
-    @ManyToOne()
-    @JoinColumn(name = "doctor")
+    private String id;
+    private LocalDateTime date;
+    @DocumentReference
     private Doctor doctor;
-
-    @ManyToOne
-    @JoinColumn(name = "patient")
+    @DocumentReference
     private User patient;
-
     private Status status;
 
     public Appointment() {
     }
 
-    public Appointment(Long id, Date date, Doctor doctor, User patient, Status status) {
+    public Appointment(String id, LocalDateTime date, Doctor doctor, User patient, Status status) {
         this.id = id;
         this.date = date;
         this.doctor = doctor;
@@ -34,19 +30,19 @@ public class Appointment {
         this.status = status;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public Date getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 

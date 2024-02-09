@@ -1,52 +1,52 @@
 package com.henrique.APIAgendaMed.models;
 
 import com.henrique.APIAgendaMed.dto.DoctorDTO;
-import jakarta.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-import javax.print.Doc;
 import java.time.LocalTime;
 import java.util.Objects;
 
-@Entity
-@Table(name = "doctor")
+@Document(collection = "doctor")
 public class Doctor {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
     private String name;
 
-    @ManyToOne()
-    @JoinColumn(name = "specialization")
+    @DocumentReference
     private Specialization specialization;
 
-    @Column(name = "start_time")
+    @Field("start_time")
     private LocalTime startTime;
-    @Column(name = "finish_time")
+    @Field("finish_time")
     private LocalTime finishTime;
 
     public Doctor() {
     }
 
-    public Doctor(String name, Specialization specialization, LocalTime startTime, LocalTime finishTime) {
+    public Doctor(String id, String name, Specialization specialization, LocalTime startTime, LocalTime finishTime) {
+        this.id = id;
         this.name = name;
         this.specialization = specialization;
         this.startTime = startTime;
         this.finishTime = finishTime;
     }
 
-    public Doctor(DoctorDTO dto) {
-        id = dto.id();
-        name = dto.name();
-        specialization = dto.specialization();
-        startTime = dto.startTime();
-        finishTime = dto.finishTime();
+    public Doctor(DoctorDTO doctorDTO) {
+        this.id = doctorDTO.id();
+        this.name = doctorDTO.name();
+        this.specialization = doctorDTO.specialization();
+        this.startTime = doctorDTO.startTime();
+        this.finishTime = doctorDTO.finishTime();
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

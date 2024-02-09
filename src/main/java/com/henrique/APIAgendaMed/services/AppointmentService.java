@@ -13,11 +13,8 @@ import com.henrique.APIAgendaMed.repositories.AppointmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.*;
-import java.time.format.DateTimeParseException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -42,7 +39,7 @@ public class AppointmentService {
         return listDTO;
     }
 
-    public AppointmentDTO findById(Long id) {
+    public AppointmentDTO findById(String id) {
         Appointment appointment = repository.findById(id).orElseThrow(() -> new NotFoundException("Appointment not found"));
         return new AppointmentDTO(appointment.getId(), appointment.getDate(), appointment.getDoctor().getId(), appointment.getPatient().getId(), appointment.getStatus());
     }
@@ -52,18 +49,21 @@ public class AppointmentService {
         DoctorDTO doctorDTO = doctorService.findById(data.doctorId());
         UserDTO userDTO = userService.findById(data.patientId());
 
-        Appointment appointment = new Appointment(null, data.date(), new Doctor(doctorDTO), new User(userDTO), Status.BOOKED);
+        Doctor doctor = new Doctor(doctorDTO.id(), doctorDTO.name(), doctorDTO.specialization(), doctorDTO.startTime(), doctorDTO.finishTime());
+        User patient = new User(userDTO.id(), userDTO.name(), userDTO.createdAt());
+
+        Appointment appointment = new Appointment(null, data.date(), doctor, patient, Status.BOOKED);
         appointment = repository.save(appointment);
 
         return new AppointmentDTO(appointment.getId(), appointment.getDate(), appointment.getDoctor().getId(), appointment.getPatient().getId(), appointment.getStatus());
     }
 
-    public void delete(Long id) {
+    public void delete(String id) {
+        findById(id);
         repository.deleteById(id);
     }
 
-    private void checkDate(Date date) {
-        LocalDateTime dateTime = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
-        if (dateTime.isBefore(LocalDateTime.now())) throw new DateException("Date must be in the future!");
+    private void checkDate(LocalDateTime date) {
+        if (date.isBefore(LocalDateTime.now())) throw new DateException("Date must be in the future");
     }
 }

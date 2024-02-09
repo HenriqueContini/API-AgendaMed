@@ -26,7 +26,7 @@ public class UserService {
         return listDTO;
     }
 
-    public UserDTO findById(Long id) {
+    public UserDTO findById(String id) {
         User user = repository.findById(id).orElseThrow(() -> new NotFoundException("User not found"));
         return new UserDTO(user.getId(), user.getName(), user.getCreatedAt());
     }

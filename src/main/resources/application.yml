@@ -1,10 +1,5 @@
 spring:
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/agenda_med?useTimezone=true&serverTimezone=UTC
-    username: root
-    password: root
-  jpa:
-    hibernate:
-      ddl-auto: none
-      show-sql: false
+  data:
+    mongodb:
+      uri: mongodb+srv://hcplayer03:password@agenda-med.2cmq9pr.mongodb.net/
+      database: db_agenda_med
