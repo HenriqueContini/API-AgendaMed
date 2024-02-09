@@ -1,5 +1,0 @@
-spring:
-  data:
-    mongodb:
-      uri: mongodb+srv://hcplayer03:password@agenda-med.2cmq9pr.mongodb.net/
-      database: db_agenda_med
