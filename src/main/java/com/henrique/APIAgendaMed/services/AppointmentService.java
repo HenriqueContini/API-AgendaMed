@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,12 +46,13 @@ public class AppointmentService {
     }
 
     public AppointmentDTO create(AppointmentDTO data) {
-        checkDate(data.date());
         DoctorDTO doctorDTO = doctorService.findById(data.doctorId());
         UserDTO userDTO = userService.findById(data.patientId());
 
         Doctor doctor = new Doctor(doctorDTO.id(), doctorDTO.name(), doctorDTO.specialization(), doctorDTO.startTime(), doctorDTO.finishTime());
         User patient = new User(userDTO.id(), userDTO.name(), userDTO.createdAt());
+
+        checkDateTime(data.date(), doctor);
 
         Appointment appointment = new Appointment(null, data.date(), doctor, patient, Status.BOOKED);
         appointment = repository.save(appointment);
@@ -63,7 +65,12 @@ public class AppointmentService {
         repository.deleteById(id);
     }
 
-    private void checkDate(LocalDateTime date) {
+    private void checkDateTime(LocalDateTime date, Doctor doctor) {
         if (date.isBefore(LocalDateTime.now())) throw new DateException("Date must be in the future");
+
+        LocalTime time = LocalTime.of(date.getHour(), date.getMinute());
+
+        if (time.isBefore(doctor.getStartTime()) || time.isAfter(doctor.getFinishTime()))
+            throw new DateException("The doctor's opening hours are from " + doctor.getStartTime() + " to " + doctor.getFinishTime());
     }
 }
