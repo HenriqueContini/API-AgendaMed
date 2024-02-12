@@ -28,6 +28,16 @@ public class AppointmentController {
         return ResponseEntity.ok(service.findById(id));
     }
 
+    @GetMapping("/doctor/{id}")
+    public ResponseEntity<List<AppointmentDTO>> findByDoctorId(@PathVariable String id) {
+        return ResponseEntity.ok(service.findByDoctorId(id));
+    }
+
+    @GetMapping("/patient/{id}")
+    public ResponseEntity<List<AppointmentDTO>> findByPatientId(@PathVariable String id) {
+        return ResponseEntity.ok(service.findByPatientId(id));
+    }
+
     @PostMapping()
     public ResponseEntity<AppointmentDTO> create(@RequestBody AppointmentDTO dto) {
         AppointmentDTO appointment = service.create(dto);

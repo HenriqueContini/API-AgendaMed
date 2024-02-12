@@ -45,6 +45,32 @@ public class AppointmentService {
         return new AppointmentDTO(appointment.getId(), appointment.getDate(), appointment.getDoctor().getId(), appointment.getPatient().getId(), appointment.getStatus());
     }
 
+    public List<AppointmentDTO> findByDoctorId(String id) {
+        DoctorDTO doctor = doctorService.findById(id);
+
+        List<Appointment> list = repository.findByDoctorId(doctor.id());
+        List<AppointmentDTO> listDTO = new ArrayList<>();
+
+        for (Appointment a : list) {
+            listDTO.add(new AppointmentDTO(a.getId(), a.getDate(), a.getDoctor().getId(), a.getPatient().getId(), a.getStatus()));
+        }
+
+        return listDTO;
+    }
+
+    public List<AppointmentDTO> findByPatientId(String id) {
+        UserDTO user = userService.findById(id);
+
+        List<Appointment> list = repository.findByPatientId(user.id());
+        List<AppointmentDTO> listDTO = new ArrayList<>();
+
+        for (Appointment a : list) {
+            listDTO.add(new AppointmentDTO(a.getId(), a.getDate(), a.getDoctor().getId(), a.getPatient().getId(), a.getStatus()));
+        }
+
+        return listDTO;
+    }
+
     public AppointmentDTO create(AppointmentDTO data) {
         DoctorDTO doctorDTO = doctorService.findById(data.doctorId());
         UserDTO userDTO = userService.findById(data.patientId());
