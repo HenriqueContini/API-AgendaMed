@@ -13,6 +13,7 @@ import com.henrique.APIAgendaMed.repositories.AppointmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -93,6 +94,7 @@ public class AppointmentService {
 
     private void checkDateTime(LocalDateTime date, Doctor doctor) {
         if (date.isBefore(LocalDateTime.now())) throw new DateException("Date must be in the future");
+        if (date.getDayOfWeek() == DayOfWeek.SUNDAY) throw new DateException("Doctors don't work on Sundays");
 
         LocalTime time = LocalTime.of(date.getHour(), date.getMinute());
 
