@@ -64,6 +64,7 @@ public class AppointmentService {
 
     public AvailabilityDTO getAvailability(String id, LocalDate date) {
         DoctorDTO doctor = doctorService.findById(id);
+        if (date.getDayOfWeek() == DayOfWeek.SUNDAY) throw new DateException("Doctors don't work on Sundays");
 
         return new AvailabilityDTO(date, listAvailability(doctor, date));
     }
@@ -115,8 +116,6 @@ public class AppointmentService {
     }
 
     private List<LocalTime> listAvailability(DoctorDTO doctor, LocalDate date) {
-        if (date.getDayOfWeek() == DayOfWeek.SUNDAY) throw new DateException("Doctors don't work on Sundays");
-
         List<Appointment> appointmentList = repository.findByDoctorIdAndDateBetween(doctor.id(), LocalDateTime.of(date, LocalTime.MIN), LocalDateTime.of(date, LocalTime.MAX));
         List<LocalTime> appointmentTimeList = appointmentList.stream().map(x -> LocalTime.of(x.getDate().getHour(), x.getDate().getMinute())).toList();
 
