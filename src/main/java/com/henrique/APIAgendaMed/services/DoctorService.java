@@ -4,13 +4,11 @@ import com.henrique.APIAgendaMed.dto.DoctorDTO;
 import com.henrique.APIAgendaMed.dto.SpecializationDTO;
 import com.henrique.APIAgendaMed.exceptions.NotFoundException;
 import com.henrique.APIAgendaMed.models.Doctor;
-import com.henrique.APIAgendaMed.models.Specialization;
 import com.henrique.APIAgendaMed.repositories.DoctorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Service

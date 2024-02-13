@@ -1,6 +1,7 @@
 package com.henrique.APIAgendaMed.controllers;
 
 import com.henrique.APIAgendaMed.dto.AppointmentDTO;
+import com.henrique.APIAgendaMed.dto.AvailabilityDTO;
 import com.henrique.APIAgendaMed.services.AppointmentService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -36,6 +38,11 @@ public class AppointmentController {
     @GetMapping("/patient/{id}")
     public ResponseEntity<List<AppointmentDTO>> findByPatientId(@PathVariable String id) {
         return ResponseEntity.ok(service.findByPatientId(id));
+    }
+
+    @GetMapping("/doctor/{id}/availability")
+    public ResponseEntity<AvailabilityDTO> getAvailability(@PathVariable String id, @RequestParam(value = "date")LocalDate date) {
+        return ResponseEntity.ok(service.getAvailability(id, date));
     }
 
     @PostMapping()
