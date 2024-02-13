@@ -1,8 +1,10 @@
 <h1 align="center">🍃 API Agenda Med 🩺</h1>
 
-### 🖥️ Projeto
+> ### ⚠️ Projeto ainda em desenvolvimento
 
-> ⚠️ Projeto ainda em desenvolvimento
+---
+
+### 🖥️ Projeto
 
 API de agendamento médico, desenvolvida com Java, Spring Boot e MongoDB. **Mais detalhes em breve...**
 
