@@ -41,7 +41,7 @@ public class AppointmentController {
     }
 
     @GetMapping("/doctor/{id}/availability")
-    public ResponseEntity<AvailabilityDTO> getAvailability(@PathVariable String id, @RequestParam(value = "date")LocalDate date) {
+    public ResponseEntity<AvailabilityDTO> getAvailability(@PathVariable String id, @RequestParam(value = "date") LocalDate date) {
         return ResponseEntity.ok(service.getAvailability(id, date));
     }
 

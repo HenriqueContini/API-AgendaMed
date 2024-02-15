@@ -1,5 +1,6 @@
 package com.henrique.APIAgendaMed.exceptions.handler;
 
+import com.henrique.APIAgendaMed.exceptions.BadRequestException;
 import com.henrique.APIAgendaMed.exceptions.DateException;
 import com.henrique.APIAgendaMed.exceptions.NotFoundException;
 import org.springframework.http.HttpStatus;
@@ -29,6 +30,12 @@ public class handler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(DateException.class)
     public final ResponseEntity<ExceptionResponse> DateException(Exception e, WebRequest request) {
+        ExceptionResponse response = new ExceptionResponse(new Date(), e.getMessage(), this.getPath(request));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    @ExceptionHandler(BadRequestException.class)
+    public final ResponseEntity<ExceptionResponse> BadRequestException(Exception e, WebRequest request) {
         ExceptionResponse response = new ExceptionResponse(new Date(), e.getMessage(), this.getPath(request));
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
