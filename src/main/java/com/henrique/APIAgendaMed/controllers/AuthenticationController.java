@@ -1,5 +1,6 @@
 package com.henrique.APIAgendaMed.controllers;
 
+import com.henrique.APIAgendaMed.dto.AuthDTO;
 import com.henrique.APIAgendaMed.dto.LoginDTO;
 import com.henrique.APIAgendaMed.dto.SignUpDTO;
 import com.henrique.APIAgendaMed.dto.UserDTO;
@@ -22,14 +23,13 @@ public class AuthenticationController {
     private AuthenticationService service;
 
     @PostMapping("/login")
-    public ResponseEntity<Void> login(@RequestBody @Valid LoginDTO data) {
-        service.login(data);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<AuthDTO> login(@RequestBody @Valid LoginDTO data) {
+        return ResponseEntity.ok().body(service.login(data));
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<UserDTO> signup(@RequestBody @Valid SignUpDTO data) {
-        UserDTO user = service.signUp(data);
+    public ResponseEntity<AuthDTO> signup(@RequestBody @Valid SignUpDTO data) {
+        AuthDTO user = service.signUp(data);
 
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }

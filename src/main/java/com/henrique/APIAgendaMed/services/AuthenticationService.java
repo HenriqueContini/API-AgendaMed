@@ -1,9 +1,11 @@
 package com.henrique.APIAgendaMed.services;
 
+import com.henrique.APIAgendaMed.dto.AuthDTO;
 import com.henrique.APIAgendaMed.dto.LoginDTO;
 import com.henrique.APIAgendaMed.dto.SignUpDTO;
 import com.henrique.APIAgendaMed.dto.UserDTO;
 import com.henrique.APIAgendaMed.exceptions.BadRequestException;
+import com.henrique.APIAgendaMed.infra.security.TokenService;
 import com.henrique.APIAgendaMed.models.User;
 import com.henrique.APIAgendaMed.models.enums.UserRole;
 import com.henrique.APIAgendaMed.repositories.UserRepository;
@@ -25,16 +27,24 @@ public class AuthenticationService implements UserDetailsService {
     @Autowired
     private UserRepository repository;
 
+    @Autowired
+    private TokenService tokenService;
+
     @Lazy
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    public void login(LoginDTO data) {
+    public AuthDTO login(LoginDTO data) {
         Authentication usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
-        authenticationManager.authenticate(usernamePassword);
+        Authentication auth = authenticationManager.authenticate(usernamePassword);
+
+        User user = (User) auth.getPrincipal();
+
+        String token = tokenService.generateToken(user);
+        return new AuthDTO(user.getId(), user.getName(), token);
     }
 
-    public UserDTO signUp(SignUpDTO data) {
+    public AuthDTO signUp(SignUpDTO data) {
         if (repository.findByLogin(data.email()) != null)
             throw new BadRequestException("The email is being used by another user");
 
@@ -43,7 +53,9 @@ public class AuthenticationService implements UserDetailsService {
 
         user = repository.save(user);
 
-        return new UserDTO(user.getId(), user.getName(), user.getCreatedAt());
+        String token = tokenService.generateToken(user);
+
+        return new AuthDTO(user.getId(), user.getName(), token);
     }
 
     @Override
