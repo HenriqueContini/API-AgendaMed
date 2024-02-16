@@ -2,8 +2,10 @@ package com.henrique.APIAgendaMed.controllers;
 
 import com.henrique.APIAgendaMed.dto.AppointmentDTO;
 import com.henrique.APIAgendaMed.dto.AvailabilityDTO;
+import com.henrique.APIAgendaMed.dto.DateDTO;
 import com.henrique.APIAgendaMed.services.AppointmentService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -46,10 +48,20 @@ public class AppointmentController {
     }
 
     @PostMapping()
-    public ResponseEntity<AppointmentDTO> create(@RequestBody AppointmentDTO dto) {
+    public ResponseEntity<AppointmentDTO> create(@Valid @RequestBody AppointmentDTO dto) {
         AppointmentDTO appointment = service.create(dto);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(appointment.id()).toUri();
         return ResponseEntity.created(uri).body(appointment);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<AppointmentDTO> updateDate(@PathVariable String id, @Valid @RequestBody DateDTO dateDTO) {
+        return ResponseEntity.ok(service.updateDate(id, dateDTO.date()));
+    }
+
+    @PatchMapping("/cancel/{id}")
+    public ResponseEntity<AppointmentDTO> cancel(@PathVariable String id) {
+        return ResponseEntity.ok(service.cancel(id));
     }
 
     @DeleteMapping("/{id}")

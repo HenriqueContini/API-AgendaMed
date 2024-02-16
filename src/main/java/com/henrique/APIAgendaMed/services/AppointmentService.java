@@ -4,6 +4,7 @@ import com.henrique.APIAgendaMed.dto.AppointmentDTO;
 import com.henrique.APIAgendaMed.dto.AvailabilityDTO;
 import com.henrique.APIAgendaMed.dto.DoctorDTO;
 import com.henrique.APIAgendaMed.dto.UserDTO;
+import com.henrique.APIAgendaMed.exceptions.BadRequestException;
 import com.henrique.APIAgendaMed.exceptions.DateException;
 import com.henrique.APIAgendaMed.exceptions.NotFoundException;
 import com.henrique.APIAgendaMed.models.Appointment;
@@ -97,6 +98,29 @@ public class AppointmentService {
         return new AppointmentDTO(appointment.getId(), appointment.getDate(), appointment.getDoctor().getId(), appointment.getPatient().getId(), appointment.getStatus());
     }
 
+    public AppointmentDTO updateDate(String id, LocalDateTime date) {
+        Appointment appointment = repository.findById(id).orElseThrow(() -> new NotFoundException("Appointment not found"));
+
+        if (appointment.getStatus() != Status.BOOKED) throw new BadRequestException("It's not possible to update the appointment as it has already been canceled");
+
+        Doctor doctor = appointment.getDoctor();
+
+        checkDateTime(date, new DoctorDTO(doctor.getId(), doctor.getName(), doctor.getSpecialization(), doctor.getStartTime(), doctor.getFinishTime()));
+
+        appointment.setDate(date);
+        repository.save(appointment);
+
+        return new AppointmentDTO(appointment.getId(), appointment.getDate(), appointment.getDoctor().getId(), appointment.getPatient().getId(), appointment.getStatus());
+    }
+
+    public AppointmentDTO cancel(String id) {
+        Appointment appointment = repository.findById(id).orElseThrow(() -> new NotFoundException("Appointment not found"));
+        appointment.setStatus(Status.CANCELLED);
+        repository.save(appointment);
+
+        return new AppointmentDTO(appointment.getId(), appointment.getDate(), appointment.getDoctor().getId(), appointment.getPatient().getId(), appointment.getStatus());
+    }
+
     public void delete(String id) {
         findById(id);
         repository.deleteById(id);
@@ -108,8 +132,8 @@ public class AppointmentService {
 
         LocalTime time = LocalTime.of(date.getHour(), date.getMinute());
 
-        if (time.isBefore(doctor.startTime()) || time.isAfter(doctor.finishTime()))
-            throw new DateException("The doctor's opening hours are from " + doctor.startTime() + " to " + doctor.finishTime());
+        if (time.isBefore(doctor.startTime()) || time.isAfter(doctor.finishTime().minusMinutes(duration)))
+            throw new DateException("The doctor's opening hours are from " + doctor.startTime() + " to " + doctor.finishTime().minusMinutes(duration));
 
         if (!listAvailability(doctor, LocalDate.from(date)).contains(time))
             throw new DateException("The doctor already has an appointment scheduled for this time");
