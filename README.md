@@ -12,9 +12,12 @@ API de agendamento médico, desenvolvida com Java, Spring Boot e MongoDB. **Mais
 
 - Java
 - Spring Boot
+- Spring Security
 - MongoDB
 - Swagger
+- JWT Token
 - Padrões: MVC e DTO
 
 ### 🖼️ Imagens
-![image](https://github.com/HenriqueContini/API-AgendaMed/assets/81761545/2f287f7c-3765-4f99-b975-6eba34d45333)
+![image](https://github.com/HenriqueContini/API-AgendaMed/assets/81761545/f0fb9d05-fc23-49df-ae14-be0171520f4e)
+
