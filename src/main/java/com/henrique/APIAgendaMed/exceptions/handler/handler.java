@@ -1,9 +1,6 @@
 package com.henrique.APIAgendaMed.exceptions.handler;
 
-import com.henrique.APIAgendaMed.exceptions.BadRequestException;
-import com.henrique.APIAgendaMed.exceptions.DateException;
-import com.henrique.APIAgendaMed.exceptions.InternalErrorException;
-import com.henrique.APIAgendaMed.exceptions.NotFoundException;
+import com.henrique.APIAgendaMed.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -45,6 +42,12 @@ public class handler extends ResponseEntityExceptionHandler {
     public final ResponseEntity<ExceptionResponse> InternalErrorException(Exception e, WebRequest request) {
         ExceptionResponse response = new ExceptionResponse(new Date(), e.getMessage(), this.getPath(request));
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+    }
+
+    @ExceptionHandler(ConflictException.class)
+    public final ResponseEntity<ExceptionResponse> ConflictException(Exception e, WebRequest request) {
+        ExceptionResponse response = new ExceptionResponse(new Date(), e.getMessage(), this.getPath(request));
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }
 
     private String getPath(WebRequest request) {

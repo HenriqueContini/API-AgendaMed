@@ -5,6 +5,7 @@ import com.henrique.APIAgendaMed.dto.AvailabilityDTO;
 import com.henrique.APIAgendaMed.dto.DoctorDTO;
 import com.henrique.APIAgendaMed.dto.UserDTO;
 import com.henrique.APIAgendaMed.exceptions.BadRequestException;
+import com.henrique.APIAgendaMed.exceptions.ConflictException;
 import com.henrique.APIAgendaMed.exceptions.DateException;
 import com.henrique.APIAgendaMed.exceptions.NotFoundException;
 import com.henrique.APIAgendaMed.models.Appointment;
@@ -88,6 +89,7 @@ public class AppointmentService {
         UserDTO userDTO = userService.findById(data.patientId());
 
         checkDateTime(data.date(), doctorDTO);
+        checkIfPatientHasAnotherAppointment(userDTO.id(), data.date());
 
         Doctor doctor = new Doctor(doctorDTO.id(), doctorDTO.name(), doctorDTO.specialization(), doctorDTO.startTime(), doctorDTO.finishTime());
         User patient = new User(userDTO.id(), userDTO.name(), userDTO.createdAt());
@@ -106,6 +108,7 @@ public class AppointmentService {
         Doctor doctor = appointment.getDoctor();
 
         checkDateTime(date, new DoctorDTO(doctor.getId(), doctor.getName(), doctor.getSpecialization(), doctor.getStartTime(), doctor.getFinishTime()));
+        checkIfPatientHasAnotherAppointment(appointment.getPatient().getId(), date);
 
         appointment.setDate(date);
         repository.save(appointment);
@@ -137,6 +140,10 @@ public class AppointmentService {
 
         if (!listAvailability(doctor, LocalDate.from(date)).contains(time))
             throw new DateException("The doctor already has an appointment scheduled for this time");
+    }
+
+    private void checkIfPatientHasAnotherAppointment(String id, LocalDateTime dateTime) {
+        if (repository.findByPatientIdAndDate(id, dateTime) != null) throw new ConflictException("An appointment already exists for the patient at the selected time.");
     }
 
     private List<LocalTime> listAvailability(DoctorDTO doctor, LocalDate date) {
