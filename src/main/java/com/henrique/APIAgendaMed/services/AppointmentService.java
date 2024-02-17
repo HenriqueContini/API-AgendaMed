@@ -40,6 +40,7 @@ public class AppointmentService {
         List<AppointmentDTO> listDTO = new ArrayList<>();
 
         for (Appointment a : list) {
+            updateStatus(a);
             listDTO.add(new AppointmentDTO(a.getId(), a.getDate(), a.getDoctor().getId(), a.getPatient().getId(), a.getStatus()));
         }
 
@@ -48,6 +49,7 @@ public class AppointmentService {
 
     public AppointmentDTO findById(String id) {
         Appointment appointment = repository.findById(id).orElseThrow(() -> new NotFoundException("Appointment not found"));
+        updateStatus(appointment);
         return new AppointmentDTO(appointment.getId(), appointment.getDate(), appointment.getDoctor().getId(), appointment.getPatient().getId(), appointment.getStatus());
     }
 
@@ -58,6 +60,7 @@ public class AppointmentService {
         List<AppointmentDTO> listDTO = new ArrayList<>();
 
         for (Appointment a : list) {
+            updateStatus(a);
             listDTO.add(new AppointmentDTO(a.getId(), a.getDate(), a.getDoctor().getId(), a.getPatient().getId(), a.getStatus()));
         }
 
@@ -78,6 +81,7 @@ public class AppointmentService {
         List<AppointmentDTO> listDTO = new ArrayList<>();
 
         for (Appointment a : list) {
+            updateStatus(a);
             listDTO.add(new AppointmentDTO(a.getId(), a.getDate(), a.getDoctor().getId(), a.getPatient().getId(), a.getStatus()));
         }
 
@@ -161,5 +165,12 @@ public class AppointmentService {
         }
 
         return timeList;
+    }
+
+    private void updateStatus (Appointment appointment) {
+        if (appointment.getStatus() == Status.BOOKED && appointment.getDate().isBefore(LocalDateTime.now())) {
+            appointment.setStatus(Status.COMPLETED);
+            repository.save(appointment);
+        }
     }
 }
