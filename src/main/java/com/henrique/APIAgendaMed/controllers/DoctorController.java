@@ -17,14 +17,17 @@ public class DoctorController {
     private DoctorService service;
 
     @GetMapping
-    public ResponseEntity<List<DoctorDTO>> findAll(@RequestParam(value = "specialization", defaultValue = "") String specialization) {
-        List<DoctorDTO> list = specialization.isBlank() ? service.findAll() : service.findBySpecialization(specialization);
-
-        return ResponseEntity.ok().body(list);
+    public ResponseEntity<List<DoctorDTO>> findAll() {
+        return ResponseEntity.ok().body(service.findAll());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<DoctorDTO> findById(@PathVariable String id) {
         return ResponseEntity.ok(service.findById(id));
+    }
+
+    @GetMapping("/specialization/{id}")
+    public ResponseEntity<List<DoctorDTO>> findBySpecialization(@PathVariable String id) {
+        return ResponseEntity.ok(service.findBySpecialization(id));
     }
 }
