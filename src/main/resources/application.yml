@@ -1,9 +1,9 @@
 spring:
   data:
     mongodb:
-      uri: ${MONGODB_URI}
-      database: ${MONGODB_DATABASE}
+      uri: ${DATABASE_URI}
+      database: ${DATABASE_NAME}
 api:
   security:
     token:
-      secret: ${JWT_TOKEN}
+      secret: ${JWT_SECRET}
